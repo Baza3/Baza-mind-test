@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Тест на тип мислення</title>
+  <style>
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.modal-content {
+  background-color: #3498db;
+  color: white;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  font-size: 28px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.close {
+  color: white;
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close:hover {
+  color: #eee;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  background: url('https://i.pinimg.com/736x/5c/e1/62/5ce1626fc1f2e1a58b1c488c24225b6c.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #000;
+}
+
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+      background: url('https://i.pinimg.com/736x/5c/e1/62/5ce1626fc1f2e1a58b1c488c24225b6c.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #000;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      text-shadow: 1px 1px 4px #000;
+    }
+
+    .question {
+      font-size: 1.3em;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    label {
+      color: #000;
+      text-shadow: none;
+      
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+      color: #000;
+      text-shadow: 0 0 3px #000;
+    }
+
+    button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 30px;
+      background-color: rgba(52, 152, 219, 0.85);
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    button:hover {
+      background-color: rgba(41, 128, 185, 0.95);
+    }
+
+    #result {
+      color: #2c3e50;
+      text-align: center;
+      font-size: 24px;
+      color: #eaffea;
+      margin-top: 30px;
+      text-shadow: 1px 1px 4px #000;
+    }
+  </style>
+</head>
+<body>
+  
+  <h1>Тест на тип мислення</h1>
+  <form id="quizForm"></form>
+  <button onclick="calculateResult()">Показати результат</button>
+  
+<div id="resultModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="result" style="margin: 0;"></h2>
+<br><button onclick="restartQuiz()" style="margin-top:20px; background:white; color:#3498db; padding:10px 20px; font-size:18px; border-radius:8px; border:none; cursor:pointer;">Пройти ще раз</button>
+  </div>
+</div>
+
+
+  <script>
+    const questions = [
+
+      {
+        text: "Який тип завдань вам найбільше подобається?",
+        options: [
+          { text: "Логічні задачі", type: "аналітичне" },
+          { text: "Творчі завдання", type: "креативне" },
+          { text: "Реальні життєві кейси", type: "практичне" },
+          { text: "Спілкування з людьми", type: "емоційне" }
+        ]
+      },
+      {
+        text: "Що ви робите у вільний час?",
+        options: [
+          { text: "Читаю або навчаюсь", type: "аналітичне" },
+          { text: "Малюю, творю щось нове", type: "креативне" },
+          { text: "Займаюсь домашніми справами", type: "практичне" },
+          { text: "Спілкуюсь або відпочиваю в компанії", type: "емоційне" }
+        ]
+      },
+      {
+        text: "Яке середовище вам комфортне?",
+        options: [
+          { text: "Тиша і порядок", type: "аналітичне" },
+          { text: "Свобода і творчий безлад", type: "креативне" },
+          { text: "Структура і чіткість", type: "практичне" },
+          { text: "Люди і взаємодія", type: "емоційне" }
+        ]
+      },
+      {
+        text: "Як ви приймаєте рішення?",
+        options: [
+          { text: "Через логіку і аналіз", type: "аналітичне" },
+          { text: "Слухаю себе", type: "емоційне" },
+          { text: "Шукаю креативний шлях", type: "креативне" },
+          { text: "Дію швидко і практично", type: "практичне" }
+        ]
+      },
+      {
+        text: "Який ваш стиль роботи?",
+        options: [
+          { text: "Занурююсь у глибину", type: "аналітичне" },
+          { text: "Шукаю нові ідеї", type: "креативне" },
+          { text: "Справляюсь з конкретними справами", type: "практичне" },
+          { text: "Працюю через натхнення", type: "емоційне" }
+        ]
+      },
+
+      {
+        text: "Як ви зазвичай вирішуєте проблеми?",
+        options: [
+          { text: "Аналізую факти і будую логіку", type: "аналітичне" },
+          { text: "Довіряю інтуїції", type: "емоційне" },
+          { text: "Шукаю нестандартні підходи", type: "креативне" },
+          { text: "Дію практично й швидко", type: "практичне" }
+        ]
+      },
+      {
+        text: "Який шкільний предмет вам найбільше подобався?",
+        options: [
+          { text: "Математика", type: "аналітичне" },
+          { text: "Малювання", type: "креативне" },
+          { text: "Біологія", type: "практичне" },
+          { text: "Література", type: "емоційне" }
+        ]
+      },
+      {
+        text: "Як ви спілкуєтесь з іншими?",
+        options: [
+          { text: "Через логіку і аргументи", type: "аналітичне" },
+          { text: "Через почуття і підтримку", type: "емоційне" },
+          { text: "Ідеями і візуальними образами", type: "креативне" },
+          { text: "Чітко і по суті", type: "практичне" }
+        ]
+      },
+      {
+        text: "Що вас найбільше надихає?",
+        options: [
+          { text: "Задачі і головоломки", type: "аналітичне" },
+          { text: "Краса і мистецтво", type: "креативне" },
+          { text: "Життєві історії людей", type: "емоційне" },
+          { text: "Реальні досягнення", type: "практичне" }
+        ]
+      },
+      {
+        text: "Як ви плануєте день?",
+        options: [
+          { text: "Розписую все по годинах", type: "аналітичне" },
+          { text: "Пливу за настроєм", type: "емоційне" },
+          { text: "Малюю образ того, чого хочу", type: "креативне" },
+          { text: "Пишу лише найголовніше", type: "практичне" }
+        ]
+      },
+      {
+        text: "Ваш улюблений фільм – це...",
+        options: [
+          { text: "Детектив", type: "аналітичне" },
+          { text: "Драма", type: "емоційне" },
+          { text: "Фентезі або артхаус", type: "креативне" },
+          { text: "Документальний або бойовик", type: "практичне" }
+        ]
+      },
+      {
+        text: "Які ігри вам подобаються?",
+        options: [
+          { text: "Логічні", type: "аналітичне" },
+          { text: "Креативні (конструктори, створення світів)", type: "креативне" },
+          { text: "Реалістичні симулятори", type: "практичне" },
+          { text: "Емоційні або сюжетні", type: "емоційне" }
+        ]
+      },
+      {
+        text: "Що ви цінуєте в інших?",
+        options: [
+          { text: "Розум", type: "аналітичне" },
+          { text: "Щирість", type: "емоційне" },
+          { text: "Уяву", type: "креативне" },
+          { text: "Практичність", type: "практичне" }
+        ]
+      },
+      {
+        text: "Що вас дратує?",
+        options: [
+          { text: "Безлад і нелогічність", type: "аналітичне" },
+          { text: "Байдужість", type: "емоційне" },
+          { text: "Сірість і банальність", type: "креативне" },
+          { text: "Порожні балачки", type: "практичне" }
+        ]
+      },
+      {
+        text: "Що б ви обрали на дозвіллі?",
+        options: [
+          { text: "Шахи, ребуси", type: "аналітичне" },
+          { text: "Малювання, креативні заняття", type: "креативне" },
+          { text: "Робота руками, щось зробити", type: "практичне" },
+          { text: "Поспілкуватися з друзями", type: "емоційне" }
+        ]
+      }
+    ];
+
+    const form = document.getElementById("quizForm");
+
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<strong>${i + 1}. ${q.text}</strong><br>`;
+      q.options.forEach((opt, j) => {
+        div.innerHTML += `
+          <label><input type="radio" name="q${i}" value="${opt.type}" required> ${opt.text}</label><br>
+        `;
+      });
+      form.appendChild(div);
+    });
+
+    function calculateResult() {
+      const formData = new FormData(form);
+      const counts = {};
+      for (let value of formData.values()) {
+        counts[value] = (counts[value] || 0) + 1;
+      }
+      let topType = null;
+      let max = 0;
+      for (let type in counts) {
+        if (counts[type] > max) {
+          max = counts[type];
+          topType = type;
+        }
+      }
+      // Перевірка на пропущені питання
+      const unanswered = [];
+      for (let i = 0; i < questions.length; i++) {
+        const selected = form.querySelector(`input[name="q${i}"]:checked`);
+        const questionDiv = form.querySelectorAll('.question')[i];
+        questionDiv.style.border = "1px solid rgba(255, 255, 255, 0.3)";
+        questionDiv.style.background = "rgba(255, 255, 255, 0.2)";
+        if (!selected) {
+          unanswered.push(i + 1);
+          questionDiv.style.border = "2px solid red";
+          questionDiv.style.background = "rgba(255, 0, 0, 0.1)";
+        }
+      }
+
+      if (unanswered.length > 0) {
+        alert("Будь ласка, дайте відповідь на всі питання. Не заповнено: " + unanswered.join(', '));
+        return;
+      }
+
+
+      document.getElementById("result").innerText = `Ваш тип мислення: ${topType.toUpperCase()}`;
+      document.getElementById("resultModal").style.display = "block";
+    }
+  </script>
+</body>
+</html>
+
+<script>
+  function closeModal() {
+    document.getElementById("resultModal").style.display = "none";
+  }
+</script>
+
+<script>
+  function restartQuiz() {
+    document.getElementById("quizForm").reset();
+    document.getElementById("resultModal").style.display = "none";
+    const questionsDivs = document.querySelectorAll('.question');
+    questionsDivs.forEach(div => {
+      div.style.border = "1px solid rgba(255, 255, 255, 0.3)";
+      div.style.background = "rgba(255, 255, 255, 0.2)";
+    });
+    window.scrollTo(0, 0);
+  }
+</script>
